@@ -1,0 +1,54 @@
+---
+# install nfs-utils
+- name: install nfs-utils
+  yum: name=nfs-utils state=present
+# copy configurations
+- name: copy idmapd.conf
+  copy: src=../files/idmapd.conf dest=/etc/idmapd.conf
+- name: copy exports
+  copy: src=../files/exports dest=/etc/exports
+# create nfs directory
+- stat: path=/data/nfs
+  register: dir
+- name: create target directory
+  file: path=/data/nfs state=directory mode=0777 #owner=root group=root
+  when: not dir.stat.exists
+# reload exports
+- name: reload NFS exports
+  command: exportfs -ra
+# start servieces
+- name: start rpcbind
+  service:
+    name: rpcbind
+    state: started
+- name: start nfs-server
+  service:
+    name: nfs
+    state: started
+# using systemctl
+# - name: start rpcbind
+#   systemd:
+#     name: rpcbind
+#     state: started
+# - name: start nfs-server
+#   systemd:
+#     name: nfs-server
+#     state: started
+# enable services
+- name: enable rpcbind
+  service:
+    name: rpcbind
+    enabled: yes
+- name: enable nfs-server
+  service:
+    name: nfs
+    enabled: yes
+# using systemctl
+# - name: enable rpcbind
+#   systemd:
+#     name: rpcbind
+#     enabled: yes
+# - name: enable nfs-server
+#   systemd:
+#     name: nfs-server
+#     enabled: yes

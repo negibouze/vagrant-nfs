@@ -1,0 +1,7 @@
+---
+- name: remove all rules from iptables
+  command: /sbin/iptables -F
+- name: iptables stop
+  service: name=iptables state=stopped
+- name: iptables off
+  command: /sbin/chkconfig iptables off

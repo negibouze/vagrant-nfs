@@ -1,0 +1,17 @@
+---
+- name: edit sysconfig/clock (ZONE)
+  replace:
+    path: /etc/sysconfig/clock
+    regexp: '^ZONE="UTC"$'
+    replace: 'ZONE="Asia/Tokyo"'
+- name: edit sysconfig/clock (UTC)
+  replace:
+    path: /etc/sysconfig/clock
+    regexp: '^UTC=true$'
+    replace: 'UTC=false'
+- name: change timezone
+  file:
+    src: /usr/share/zoneinfo/Asia/Tokyo
+    dest: /etc/localtime
+    state: link
+    force: yes
