@@ -38,7 +38,6 @@ Vagrant.configure("2") do |config|
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
 
-  config.ssh.insert_key = false
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
 
